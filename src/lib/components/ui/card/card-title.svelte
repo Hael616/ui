@@ -2,6 +2,6 @@
 	import { cn } from '$lib/utils';
 </script>
 
-<h3 class={cn('text-lg leading-none font-semibold tracking-tight', $$props.class)} {...$$restProps}>
+<h3 class={cn('text-lg font-semibold leading-none tracking-tight', $$props.class)} {...$$restProps}>
 	<slot />
 </h3>

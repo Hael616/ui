@@ -71,7 +71,7 @@
 			{#if variantIcons[type]}
 				<span class="text-lg">{variantIcons[type]}</span>
 			{/if}
-			<h5 class="leading-none font-medium tracking-tight">{title}</h5>
+			<h5 class="font-medium leading-none tracking-tight">{title}</h5>
 		</div>
 		{#if description}
 			<div class="text-sm opacity-90">{description}</div>
@@ -80,7 +80,7 @@
 
 	{#if closable}
 		<button
-			class="text-foreground/50 hover:text-foreground absolute top-2 right-2 rounded-md p-1 opacity-70 transition-opacity group-hover:opacity-100 hover:opacity-100 focus:opacity-100 focus:ring-2 focus:outline-none"
+			class="absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-70 transition-opacity hover:text-foreground hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100"
 			on:click={close}
 			aria-label="Close toast"
 		>

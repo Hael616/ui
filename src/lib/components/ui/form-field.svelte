@@ -13,14 +13,14 @@
 		<label
 			for={id}
 			class={cn(
-				'text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+				'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
 				error && 'text-destructive',
 				$$props.labelClass
 			)}
 		>
 			{label}
 			{#if required}
-				<span class="text-destructive ml-1">*</span>
+				<span class="ml-1 text-destructive">*</span>
 			{/if}
 		</label>
 	{/if}
@@ -28,10 +28,10 @@
 	<slot />
 
 	{#if description && !error}
-		<p class="text-muted-foreground text-sm">{description}</p>
+		<p class="text-sm text-muted-foreground">{description}</p>
 	{/if}
 
 	{#if error}
-		<p class="text-destructive text-sm">{error}</p>
+		<p class="text-sm text-destructive">{error}</p>
 	{/if}
 </div>
