@@ -2,7 +2,7 @@
 
 A modern, accessible, and customizable UI component library for SvelteKit projects. This library provides a collection of reusable UI components designed with best practices in mind.
 
-![hash/ui Components](https://placekitten.com/800/400)
+![hash/ui Components](/static/og.png)
 
 ## Features
 
