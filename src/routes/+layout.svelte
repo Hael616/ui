@@ -5,7 +5,6 @@
 </script>
 
 <div class="flex min-h-screen flex-col">
-	<!-- Floating navbar -->
 	<div class="container relative z-20 mx-auto px-4 sm:px-6">
 		<div class="fixed left-1/2 top-6 z-50 w-full max-w-3xl -translate-x-1/2">
 			<header
