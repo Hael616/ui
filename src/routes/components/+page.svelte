@@ -10,8 +10,20 @@
 		CardContent,
 		CardFooter
 	} from '$lib/components/ui/card/index';
+	import {
+		Dialog,
+		DialogHeader,
+		DialogTitle,
+		DialogDescription,
+		DialogContent,
+		DialogFooter,
+		DialogClose
+	} from '$lib/components/ui/dialog/index';
 	import { toasts } from '$lib/stores/toast-store';
 	import { Check, X, AlertCircle, Info, AlertTriangle } from 'lucide-svelte';
+
+	let basicDialogOpen = false;
+	let formDialogOpen = false;
 </script>
 
 <div class="container mx-auto px-4 py-12 sm:px-6">
@@ -104,31 +116,85 @@
 				</div>
 			</div>
 
+			<!-- Dialogs -->
+			<div class="space-y-4">
+				<h2 class="text-xl font-semibold">Dialogs</h2>
+				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+					<Button onclick={() => (basicDialogOpen = true)}>Open Basic Dialog</Button>
+					<Button onclick={() => (formDialogOpen = true)}>Open Form Dialog</Button>
+				</div>
+
+				<!-- Basic Dialog -->
+				<Dialog bind:open={basicDialogOpen}>
+					<DialogClose onclick={() => (basicDialogOpen = false)} />
+					<DialogHeader>
+						<DialogTitle>Dialog Title</DialogTitle>
+						<DialogDescription>A simple dialog with basic content.</DialogDescription>
+					</DialogHeader>
+					<DialogContent>
+						<p>
+							This is a basic dialog example. Dialogs are useful for displaying content that requires
+							user attention or interaction.
+						</p>
+					</DialogContent>
+					<DialogFooter>
+						<Button variant="outline" onclick={() => (basicDialogOpen = false)}>Cancel</Button>
+						<Button onclick={() => (basicDialogOpen = false)}>Confirm</Button>
+					</DialogFooter>
+				</Dialog>
+
+				<!-- Form Dialog -->
+				<Dialog bind:open={formDialogOpen}>
+					<DialogClose onclick={() => (formDialogOpen = false)} />
+					<DialogHeader>
+						<DialogTitle>Edit Profile</DialogTitle>
+						<DialogDescription>Make changes to your profile information.</DialogDescription>
+					</DialogHeader>
+					<DialogContent>
+						<div class="grid gap-4">
+							<FormField id="dialog-name" label="Name">
+								<Input id="dialog-name" placeholder="Enter your name" />
+							</FormField>
+							<FormField id="dialog-email" label="Email">
+								<Input id="dialog-email" type="email" placeholder="Enter your email" />
+							</FormField>
+						</div>
+					</DialogContent>
+					<DialogFooter>
+						<Button variant="outline" onclick={() => (formDialogOpen = false)}>Cancel</Button>
+						<Button onclick={() => {
+							toasts.success('Profile updated', 'Your profile has been updated successfully.');
+							formDialogOpen = false;
+						}}>Save Changes</Button>
+					</DialogFooter>
+				</Dialog>
+			</div>
+
 			<!-- Toast Notifications -->
 			<div class="space-y-4">
 				<h2 class="text-xl font-semibold">Toast Notifications</h2>
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2">
 					<Button
 						variant="default"
-						on:click={() => toasts.success('Success!', 'Operation completed successfully.')}
+						onclick={() => toasts.success('Success!', 'Operation completed successfully.')}
 					>
 						<Check class="mr-2 h-4 w-4" /> Show Success Toast
 					</Button>
 					<Button
 						variant="destructive"
-						on:click={() => toasts.error('Error!', 'Something went wrong.')}
+						onclick={() => toasts.error('Error!', 'Something went wrong.')}
 					>
 						<X class="mr-2 h-4 w-4" /> Show Error Toast
 					</Button>
 					<Button
 						variant="secondary"
-						on:click={() => toasts.info('Information', 'This is some useful information.')}
+						onclick={() => toasts.info('Information', 'This is some useful information.')}
 					>
 						<Info class="mr-2 h-4 w-4" /> Show Info Toast
 					</Button>
 					<Button
 						variant="outline"
-						on:click={() => toasts.warning('Warning', 'Proceed with caution.')}
+						onclick={() => toasts.warning('Warning', 'Proceed with caution.')}
 					>
 						<AlertTriangle class="mr-2 h-4 w-4" /> Show Warning Toast
 					</Button>
