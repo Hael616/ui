@@ -1,6 +1,19 @@
 <script lang="ts">
 	import { Check, X, Info, AlertTriangle } from 'lucide-svelte';
 	import { Button, Card, FormField, Input, Toasts } from '$lib/components/ui';
+
+	import {
+		Dialog,
+		DialogHeader,
+		DialogTitle,
+		DialogDescription,
+		DialogContent,
+		DialogFooter,
+		DialogClose
+	} from '$lib/components/ui/dialog/index';
+
+	let basicDialogOpen = false;
+	let formDialogOpen = false;
 </script>
 
 <div class="container mx-auto px-4 py-12 sm:px-6">
@@ -89,6 +102,63 @@
 						</Card.CardFooter>
 					</Card.Card>
 				</div>
+			</div>
+
+			<!-- Dialogs -->
+			<div class="space-y-4">
+				<h2 class="text-xl font-semibold">Dialogs</h2>
+				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+					<Button onclick={() => (basicDialogOpen = true)}>Open Basic Dialog</Button>
+					<Button onclick={() => (formDialogOpen = true)}>Open Form Dialog</Button>
+				</div>
+
+				<!-- Basic Dialog -->
+				<Dialog bind:open={basicDialogOpen}>
+					<DialogClose onclick={() => (basicDialogOpen = false)} />
+					<DialogHeader>
+						<DialogTitle>Dialog Title</DialogTitle>
+						<DialogDescription>A simple dialog with basic content.</DialogDescription>
+					</DialogHeader>
+					<DialogContent>
+						<p>
+							This is a basic dialog example. Dialogs are useful for displaying content that
+							requires user attention or interaction.
+						</p>
+					</DialogContent>
+					<DialogFooter>
+						<Button variant="outline" onclick={() => (basicDialogOpen = false)}>Cancel</Button>
+						<Button onclick={() => (basicDialogOpen = false)}>Confirm</Button>
+					</DialogFooter>
+				</Dialog>
+
+				<!-- Form Dialog -->
+				<Dialog bind:open={formDialogOpen}>
+					<DialogClose onclick={() => (formDialogOpen = false)} />
+					<DialogHeader>
+						<DialogTitle>Edit Profile</DialogTitle>
+						<DialogDescription>Make changes to your profile information.</DialogDescription>
+					</DialogHeader>
+					<DialogContent>
+						<div class="grid gap-4">
+							<FormField id="dialog-name" label="Name" placeholder="Enter your name" />
+							<FormField
+								id="dialog-email"
+								label="Email"
+								type="email"
+								placeholder="Enter your email"
+							/>
+						</div>
+					</DialogContent>
+					<DialogFooter>
+						<Button variant="outline" onclick={() => (formDialogOpen = false)}>Cancel</Button>
+						<Button
+							onclick={() => {
+								Toasts.success('Profile updated', 'Your profile has been updated successfully.');
+								formDialogOpen = false;
+							}}>Save Changes</Button
+						>
+					</DialogFooter>
+				</Dialog>
 			</div>
 
 			<!-- Toast Notifications -->
