@@ -1,17 +1,5 @@
 <script lang="ts">
-	import {
-		Card,
-		CardHeader,
-		CardTitle,
-		CardDescription,
-		CardContent,
-		CardFooter
-	} from '$lib/components/ui/card/index';
-	import Button from '$lib/components/ui/button.svelte';
-	import Input from '$lib/components/ui/input.svelte';
-	import FormField from '$lib/components/ui/form-field.svelte';
-	import Form from '$lib/components/ui/form.svelte';
-	import { toasts } from '$lib/stores/toast-store';
+	import { CompositeForm, FormField, Button, Toasts } from '$lib/components/ui';
 
 	type FormEvent = { detail: { data: Record<string, string> } };
 
@@ -94,7 +82,7 @@
 
 		if (isValid) {
 			// In a real app, you'd submit the form to your backend here
-			toasts.success('Registration successful!', 'Your account has been created.');
+			Toasts.success('Registration successful!', 'Your account has been created.');
 
 			// Reset the form
 			formData = {
@@ -105,91 +93,76 @@
 				confirmPassword: ''
 			};
 		} else {
-			toasts.error('Registration failed', 'Please check the form for errors.');
+			Toasts.error('Registration failed', 'Please check the form for errors.');
 		}
 	}
 </script>
 
 <div class="container mx-auto px-4 py-12 sm:px-6">
 	<div class="mx-auto max-w-md">
-		<Card>
-			<CardHeader>
-				<CardTitle>Create an account</CardTitle>
-				<CardDescription>Fill out the form below to create your account.</CardDescription>
-			</CardHeader>
-			<CardContent>
-				<Form on:submit={handleSubmit} class="space-y-4">
-					<div class="grid grid-cols-2 gap-4">
-						<FormField id="firstName" label="First name" error={errors.firstName} required>
-							<Input
-								id="firstName"
-								name="firstName"
-								bind:value={formData.firstName}
-								error={errors.firstName}
-								required
-							/>
-						</FormField>
+		<CompositeForm
+			onsubmit={handleSubmit}
+			title="Create an account"
+			description="Fill out the form below to create your account."
+			styles={{
+				wrapper: 'shadow-md',
+				content: 'flex flex-col gap-4'
+			}}
+		>
+			`
+			<div class="grid grid-cols-2 gap-4">
+				<FormField
+					id="firstName"
+					label="First name"
+					placeholder="First name"
+					error={errors.firstName}
+					required
+				/>
 
-						<FormField id="lastName" label="Last name" error={errors.lastName} required>
-							<Input
-								id="lastName"
-								name="lastName"
-								bind:value={formData.lastName}
-								error={errors.lastName}
-								required
-							/>
-						</FormField>
-					</div>
+				<FormField
+					id="lastName"
+					label="Last name"
+					placeholder="Last name"
+					error={errors.lastName}
+					required
+				/>
+			</div>
 
-					<FormField id="email" label="Email" error={errors.email} required>
-						<Input
-							id="email"
-							name="email"
-							type="email"
-							bind:value={formData.email}
-							error={errors.email}
-							required
-						/>
-					</FormField>
+			<FormField
+				id="email"
+				label="Email"
+				placeholder="johndoe@gmail.com"
+				error={errors.email}
+				required
+			/>
 
-					<FormField id="password" label="Password" error={errors.password} required>
-						<Input
-							id="password"
-							name="password"
-							type="password"
-							bind:value={formData.password}
-							error={errors.password}
-							required
-						/>
-					</FormField>
+			<FormField
+				id="password"
+				label="Password"
+				placeholder="Password"
+				error={errors.password}
+				required
+			/>
 
-					<FormField
-						id="confirmPassword"
-						label="Confirm password"
-						error={errors.confirmPassword}
-						required
-					>
-						<Input
-							id="confirmPassword"
-							name="confirmPassword"
-							type="password"
-							bind:value={formData.confirmPassword}
-							error={errors.confirmPassword}
-							required
-						/>
-					</FormField>
+			<FormField
+				id="confirmPassword"
+				label="Confirm password"
+				placeholder="Confirm password"
+				error={errors.confirmPassword}
+				required
+			/>
 
-					<div class="pt-2">
-						<Button type="submit" class="w-full">Create account</Button>
-					</div>
-				</Form>
-			</CardContent>
-			<CardFooter class="flex justify-center">
-				<p class="text-muted-foreground text-sm">
+			<div class="pt-2">
+				<Button type="submit" class="w-full">Create account</Button>
+			</div>
+			`
+
+			{#snippet footerContent()}
+				<p class="text-sm text-muted-foreground">
 					Already have an account?
 					<a href="#" class="text-primary underline-offset-4 hover:underline">Sign in</a>
 				</p>
-			</CardFooter>
-		</Card>
+			{/snippet}
+		</CompositeForm>
 	</div>
 </div>

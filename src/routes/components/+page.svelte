@@ -1,17 +1,6 @@
 <script lang="ts">
-	import Button from '$lib/components/ui/button.svelte';
-	import Input from '$lib/components/ui/input.svelte';
-	import FormField from '$lib/components/ui/form-field.svelte';
-	import {
-		Card,
-		CardHeader,
-		CardTitle,
-		CardDescription,
-		CardContent,
-		CardFooter
-	} from '$lib/components/ui/card/index';
-	import { toasts } from '$lib/stores/toast-store';
-	import { Check, X, AlertCircle, Info, AlertTriangle } from 'lucide-svelte';
+	import { Check, X, Info, AlertTriangle } from 'lucide-svelte';
+	import { Button, Card, FormField, Input, Toasts } from '$lib/components/ui';
 </script>
 
 <div class="container mx-auto px-4 py-12 sm:px-6">
@@ -23,7 +12,7 @@
 			<div class="space-y-4">
 				<h2 class="text-xl font-semibold">Buttons</h2>
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-					<Button>Default</Button>
+					<Button onpress={() => console.log('testing default')}>Default</Button>
 					<Button variant="destructive">Destructive</Button>
 					<Button variant="outline">Outline</Button>
 					<Button variant="secondary">Secondary</Button>
@@ -48,19 +37,19 @@
 					<Input placeholder="Default input" />
 					<Input placeholder="Disabled input" disabled />
 					<Input placeholder="With error" error="This field is required" />
-					<FormField id="with-label" label="Input with label">
-						<Input id="with-label" placeholder="Input with label" />
-					</FormField>
+					<FormField id="with-label" placeholder="Field with label" label="Input with label" />
 					<FormField
 						id="with-description"
 						label="Input with description"
 						description="This is a helpful description"
-					>
-						<Input id="with-description" placeholder="Input with description" />
-					</FormField>
-					<FormField id="required-field" label="Required field" required>
-						<Input id="required-field" placeholder="Required field" required />
-					</FormField>
+						placeholder="Field with description"
+					/>
+					<FormField
+						id="required-field"
+						placeholder="Required field"
+						label="Required field"
+						required
+					/>
 				</div>
 			</div>
 
@@ -68,39 +57,37 @@
 			<div class="space-y-4">
 				<h2 class="text-xl font-semibold">Cards</h2>
 				<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-					<Card>
-						<CardHeader>
-							<CardTitle>Card Title</CardTitle>
-							<CardDescription>Card description goes here</CardDescription>
-						</CardHeader>
-						<CardContent>
+					<Card.Card>
+						<Card.CardHeader>
+							<Card.CardTitle>Card Title</Card.CardTitle>
+							<Card.CardDescription>Card description goes here</Card.CardDescription>
+						</Card.CardHeader>
+						<Card.CardContent>
 							<p>This is the main content of the card. It can contain any elements.</p>
-						</CardContent>
-						<CardFooter>
+						</Card.CardContent>
+						<Card.CardFooter>
 							<Button variant="outline" size="sm">Cancel</Button>
 							<Button size="sm" class="ml-2">Submit</Button>
-						</CardFooter>
-					</Card>
+						</Card.CardFooter>
+					</Card.Card>
 
-					<Card>
-						<CardHeader>
-							<CardTitle>Notification Card</CardTitle>
-							<CardDescription>With interactive elements</CardDescription>
-						</CardHeader>
-						<CardContent>
+					<Card.Card>
+						<Card.CardHeader>
+							<Card.CardTitle>Notification Card</Card.CardTitle>
+							<Card.CardDescription>With interactive elements</Card.CardDescription>
+						</Card.CardHeader>
+						<Card.CardContent>
 							<p class="mb-4">
 								Cards are perfect for displaying related content in a contained manner.
 							</p>
 							<div class="flex gap-2">
-								<FormField id="card-input" label="Email">
-									<Input id="card-input" placeholder="Enter email" />
-								</FormField>
+								<FormField id="card-input" label="Email" placeholder="Your email" />
 							</div>
-						</CardContent>
-						<CardFooter>
+						</Card.CardContent>
+						<Card.CardFooter>
 							<Button>Subscribe</Button>
-						</CardFooter>
-					</Card>
+						</Card.CardFooter>
+					</Card.Card>
 				</div>
 			</div>
 
@@ -110,25 +97,25 @@
 				<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2">
 					<Button
 						variant="default"
-						on:click={() => toasts.success('Success!', 'Operation completed successfully.')}
+						onclick={() => Toasts.success('Success!', 'Operation completed successfully.')}
 					>
 						<Check class="mr-2 h-4 w-4" /> Show Success Toast
 					</Button>
 					<Button
 						variant="destructive"
-						on:click={() => toasts.error('Error!', 'Something went wrong.')}
+						onclick={() => Toasts.error('Error!', 'Something went wrong.')}
 					>
 						<X class="mr-2 h-4 w-4" /> Show Error Toast
 					</Button>
 					<Button
 						variant="secondary"
-						on:click={() => toasts.info('Information', 'This is some useful information.')}
+						onclick={() => Toasts.info('Information', 'This is some useful information.')}
 					>
 						<Info class="mr-2 h-4 w-4" /> Show Info Toast
 					</Button>
 					<Button
 						variant="outline"
-						on:click={() => toasts.warning('Warning', 'Proceed with caution.')}
+						onclick={() => Toasts.warning('Warning', 'Proceed with caution.')}
 					>
 						<AlertTriangle class="mr-2 h-4 w-4" /> Show Warning Toast
 					</Button>

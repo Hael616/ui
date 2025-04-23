@@ -1,18 +1,33 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
 	import { fade, fly } from 'svelte/transition';
-	import { createEventDispatcher } from 'svelte';
+
 	import { X } from 'lucide-svelte';
+	import type { ToastType } from './toasts.svelte.ts';
 
-	const dispatch = createEventDispatcher();
+	let toastId = $props.id();
 
-	export let type: 'default' | 'success' | 'info' | 'warning' | 'error' = 'default';
-	export let title: string;
-	export let description: string | undefined = undefined;
-	export let duration: number = 5000;
-	export let closable: boolean = true;
+	const {
+		type = 'default',
+		title,
+		description,
+		duration = 5000,
+		closable = true,
+		close = () => {},
+		class: importedClass = '',
+		...restProps
+	} = $props<{
+		type?: ToastType;
+		title: string;
+		description?: string;
+		duration?: number;
+		closable?: boolean;
+		close?: () => void;
+		class?: string;
+		[key: string]: any;
+	}>();
 
-	const variantStyles = {
+	const variantStyles: Record<string, string> = {
 		default: 'bg-background border',
 		success: 'bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800',
 		info: 'bg-blue-50 border-blue-200 dark:bg-blue-900/20 dark:border-blue-800',
@@ -42,29 +57,26 @@
 		clearTimeout(timeoutId);
 	}
 
-	function close() {
-		dispatch('close');
-	}
-
-	$: {
+	$effect(() => {
 		if (duration) {
 			startTimer();
 		}
-	}
+	});
 </script>
 
 <div
+	id="toast-{toastId}"
 	class={cn(
 		'pointer-events-auto relative flex w-full items-center justify-between space-x-4 overflow-hidden rounded-md border p-6 pr-8 shadow-lg transition-all',
 		variantStyles[type],
-		$$props.class
+		importedClass
 	)}
 	role="alert"
-	on:mouseenter={stopTimer}
-	on:mouseleave={startTimer}
+	onmouseenter={stopTimer}
+	onmouseleave={startTimer}
 	in:fly={{ y: 50, duration: 300 }}
 	out:fade={{ duration: 200 }}
-	{...$$restProps}
+	{...restProps}
 >
 	<div class="grid gap-1">
 		<div class="flex items-center gap-2">
@@ -81,8 +93,9 @@
 	{#if closable}
 		<button
 			class="absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-70 transition-opacity hover:text-foreground hover:opacity-100 focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100"
-			on:click={close}
+			onclick={close}
 			aria-label="Close toast"
+			name="close"
 		>
 			<X class="h-4 w-4" />
 		</button>

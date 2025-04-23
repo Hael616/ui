@@ -1,7 +1,8 @@
 <script lang="ts">
 	import '../app.css';
-	import { page } from '$app/stores';
-	import Toasts from '$lib/components/ui/toasts.svelte';
+
+	import { page } from '$app/state';
+	import { ToastsContainer } from '$lib/components/ui';
 </script>
 
 <svelte:head>
@@ -32,13 +33,13 @@
 	<div class="container relative z-20 mx-auto px-4 sm:px-6">
 		<div class="fixed left-1/2 top-6 z-50 w-full max-w-3xl -translate-x-1/2">
 			<header
-				class="rounded-full border-2 border-gray-200 bg-card/30 px-4 shadow-glass backdrop-blur-md sm:px-6"
+				class="shadow-glass rounded-full border-2 border-gray-200 bg-card/30 px-4 backdrop-blur-md sm:px-6"
 			>
 				<div class="flex h-12 items-center">
 					<nav class="flex flex-1 items-center justify-center gap-4 text-sm sm:gap-6">
 						<a
 							href="/"
-							class="font-medium transition-all duration-300 hover:text-primary {$page.url
+							class="font-medium transition-all duration-300 hover:text-primary {page.url
 								.pathname === '/'
 								? 'text-foreground'
 								: 'text-foreground/60'}"
@@ -47,7 +48,7 @@
 						</a>
 						<a
 							href="/components"
-							class="font-medium transition-all duration-300 hover:text-primary {$page.url
+							class="font-medium transition-all duration-300 hover:text-primary {page.url
 								.pathname === '/components'
 								? 'text-foreground'
 								: 'text-foreground/60'}"
@@ -56,7 +57,7 @@
 						</a>
 						<a
 							href="/form-example"
-							class="font-medium transition-all duration-300 hover:text-primary {$page.url
+							class="font-medium transition-all duration-300 hover:text-primary {page.url
 								.pathname === '/form-example'
 								? 'text-foreground'
 								: 'text-foreground/60'}"
@@ -89,5 +90,5 @@
 		</div>
 	</footer>
 
-	<Toasts position="bottom-right" />
+	<ToastsContainer position="bottom-right" />
 </div>

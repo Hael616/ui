@@ -1,16 +1,33 @@
 <script lang="ts">
 	import { cn } from '$lib/utils';
-	import { createEventDispatcher } from 'svelte';
+	import { type Snippet } from 'svelte';
 
-	const dispatch = createEventDispatcher();
+	type buttonType = 'button' | 'submit' | 'reset';
+	type buttonVariant = 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+	type buttonSize = 'default' | 'sm' | 'lg' | 'icon';
 
-	export let type: 'button' | 'submit' | 'reset' = 'button';
-	export let variant: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link' =
-		'default';
-	export let size: 'default' | 'sm' | 'lg' | 'icon' = 'default';
-	export let disabled = false;
-	export let loading = false;
+	let {
+		children,
+		type = 'button',
+		variant = 'default',
+		size = 'default',
+		disabled = $bindable(false),
+		loading = $bindable(false),
+		class: className = '',
 
+		...restProps
+	}: {
+		children: Snippet;
+		type?: buttonType;
+		variant?: buttonVariant;
+		size?: buttonSize;
+		disabled?: boolean;
+		loading?: boolean;
+		class?: string;
+		[key: string]: any;
+	} = $props();
+
+	const buttonId = $props.id();
 	const variantClassMap = {
 		default: 'bg-primary text-primary-foreground hover:opacity-90',
 		destructive: 'bg-destructive text-destructive-foreground hover:opacity-90',
@@ -26,15 +43,10 @@
 		lg: 'h-11 rounded-md px-8',
 		icon: 'h-10 w-10'
 	};
-
-	function handleClick(event: MouseEvent) {
-		if (!disabled && !loading) {
-			dispatch('click', event);
-		}
-	}
 </script>
 
 <button
+	id={buttonId}
 	{type}
 	class={cn(
 		'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors',
@@ -42,14 +54,13 @@
 		'disabled:pointer-events-none disabled:opacity-50',
 		variantClassMap[variant],
 		sizeClassMap[size],
-		$$props.class
+		className
 	)}
 	{disabled}
-	on:click={handleClick}
-	{...$$restProps}
+	{...restProps}
 >
 	{#if loading}
 		<span class="mr-2 animate-spin">&#9696;</span>
 	{/if}
-	<slot />
+	{@render children()}
 </button>

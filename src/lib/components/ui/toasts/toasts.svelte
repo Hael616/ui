@@ -1,17 +1,14 @@
 <script lang="ts">
-	import { toasts } from '$lib/stores/toast-store';
-	import Toast from './toast.svelte';
 	import { cn } from '$lib/utils';
+	import { Toast, Toasts, type ToastPosition } from './index.ts';
 
-	export let position:
-		| 'top-left'
-		| 'top-right'
-		| 'bottom-left'
-		| 'bottom-right'
-		| 'top-center'
-		| 'bottom-center' = 'bottom-right';
+	let {
+		position = 'bottom-center',
+		class: importedClass = '',
+		...restProps
+	} = $props<{ position: ToastPosition }>();
 
-	const positionClasses = {
+	const positionClasses: Record<ToastPosition, string> = {
 		'top-left': 'top-0 left-0',
 		'top-right': 'top-0 right-0',
 		'bottom-left': 'bottom-0 left-0',
@@ -21,7 +18,7 @@
 	};
 
 	function handleClose(id: string) {
-		toasts.remove(id);
+		Toasts.remove(id);
 	}
 </script>
 
@@ -29,19 +26,18 @@
 	class={cn(
 		'fixed z-50 flex w-full max-w-md flex-col gap-2 p-4 sm:p-6 md:max-w-lg',
 		positionClasses[position],
-		$$props.class
+		importedClass
 	)}
-	{...$$restProps}
+	{...restProps}
 >
-	{#each $toasts as toast (toast.id)}
+	{#each Toasts.toasts as toast (toast.id)}
 		<Toast
 			type={toast.type}
 			title={toast.title}
 			description={toast.description}
 			duration={toast.duration ?? 5000}
 			closable={toast.closable ?? true}
-			on:close={() => handleClose(toast.id)}
+			close={() => handleClose(toast.id)}
 		/>
 	{/each}
 </div>
- 

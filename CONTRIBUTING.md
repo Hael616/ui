@@ -95,6 +95,7 @@ We follow the [Conventional Commits](https://www.conventionalcommits.org/) speci
 ```
 
 ### Types
+
 - **feat**: A new feature
 - **fix**: A bug fix
 - **docs**: Documentation only changes
@@ -130,4 +131,4 @@ We use Vitest and Testing Library for testing components:
 - Test accessibility
 - Test edge cases and error states
 
-Thank you for contributing to hash/ui! 
+Thank you for contributing to hash/ui!
