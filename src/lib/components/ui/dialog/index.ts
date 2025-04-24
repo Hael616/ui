@@ -1,4 +1,4 @@
-import Dialog from '../dialog.svelte';
+import Dialog from './dialog.svelte';
 import DialogHeader from './dialog-header.svelte';
 import DialogContent from './dialog-content.svelte';
 import DialogFooter from './dialog-footer.svelte';
