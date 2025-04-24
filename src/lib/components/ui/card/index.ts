@@ -1,15 +1,8 @@
-import Card from '../card.svelte';
-import CardHeader from './card-header.svelte';
-import CardTitle from './card-title.svelte';
-import CardDescription from './card-description.svelte';
-import CardContent from './card-content.svelte';
-import CardFooter from './card-footer.svelte';
+import Card from './Card.svelte';
+import CardHeader from './CardHeader.svelte';
+import CardTitle from './CardTitle.svelte';
+import CardDescription from './CardDescription.svelte';
+import CardContent from './CardContent.svelte';
+import CardFooter from './CardFooter.svelte';
 
-export {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter
-}; 
+export { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter };

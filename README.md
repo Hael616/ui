@@ -53,7 +53,7 @@ After installing and starting the development server, you can:
 
 ```svelte
 <script>
-  import Button from '$lib/components/ui/button.svelte';
+	import { Button } from '$lib/components/ui';
 </script>
 
 <Button>Default Button</Button>
@@ -67,49 +67,44 @@ After installing and starting the development server, you can:
 
 ```svelte
 <script>
-  import Input from '$lib/components/ui/input.svelte';
-  import FormField from '$lib/components/ui/form-field.svelte';
+	import { Input, FormField } from '$lib/components/ui';
 </script>
 
 <Input placeholder="Basic input" />
 
-<FormField id="email" label="Email Address" required>
-  <Input id="email" type="email" placeholder="Enter your email" />
-</FormField>
+<FormField id="email" type="email" placeholder="Your email" label="Email Address" required />
 ```
 
 ### Card Component
 
 ```svelte
 <script>
-  import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '$lib/components/ui/card/index';
-  import Button from '$lib/components/ui/button.svelte';
+	import { Card, Button } from '$lib/components/ui';
 </script>
 
-<Card>
-  <CardHeader>
-    <CardTitle>Card Title</CardTitle>
-    <CardDescription>Card description</CardDescription>
-  </CardHeader>
-  <CardContent>
-    <p>This is the card content</p>
-  </CardContent>
-  <CardFooter>
-    <Button>Action</Button>
-  </CardFooter>
-</Card>
+<Card.Card>
+	<Card.CardHeader>
+		<Card.CardTitle>Card Title</Card.CardTitle>
+		<Card.CardDescription>Card description</Card.CardDescription>
+	</Card.CardHeader>
+	<Card.CardContent>
+		<p>This is the card content</p>
+	</Card.CardContent>
+	<Card.CardFooter>
+		<Button>Action</Button>
+	</Card.CardFooter>
+</Card.Card>
 ```
 
 ### Toast Notifications
 
 ```svelte
 <script>
-  import { toasts } from '$lib/stores/toast-store';
-  import Button from '$lib/components/ui/button.svelte';
+	import { Button, Toasts } from '$lib/components/ui';
 </script>
 
-<Button on:click={() => toasts.success('Success!', 'Operation completed successfully')}>
-  Show Success Toast
+<Button onclick={() => Toasts.success('Success!', 'Operation completed successfully')}>
+	Show Success Toast
 </Button>
 ```
 
@@ -121,17 +116,17 @@ The component library uses CSS variables for theming. You can customize the them
 
 ```css
 :root {
-  --background: 0 0% 100%;
-  --foreground: 240 10% 3.9%;
-  --primary: 240 5.9% 10%;
-  --primary-foreground: 0 0% 98%;
-  /* other variables */
+	--background: 0 0% 100%;
+	--foreground: 240 10% 3.9%;
+	--primary: 240 5.9% 10%;
+	--primary-foreground: 0 0% 98%;
+	/* other variables */
 }
 
 .dark {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
-  /* other dark mode variables */
+	--background: 240 10% 3.9%;
+	--foreground: 0 0% 98%;
+	/* other dark mode variables */
 }
 ```
 
