@@ -19,15 +19,13 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
+      - name: Install Netlify
+        run: pnpm add netlify-cli --save-dev
+      - name: Install Dependencies
+        run: pnpm install   
       - run: pnpm run test
-      - run: pnpm run build
+      - run: pnpx netlify build
+      - run: pnpx netlify deploy --alias=preview
 
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v3.0
-        with:
-          publish-dir: ./dist
-          production-branch: main
-          enable-github-deployment: false
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          netlify-token: ${{ secrets.NETLIFY_TOKEN }}
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
+
+        
