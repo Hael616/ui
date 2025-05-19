@@ -85,7 +85,7 @@ jobs:
           if [ "${{ github.event_name }}" = "push" ]; then
             echo "url=${{ steps.production-deploy.outputs.NETLIFY_LIVE_URL }}" >> $GITHUB_OUTPUT
           else
-            echo "url=${{ steps.preview-deploy.outputs.NETLIFY_LIVE_URL }}" >> $GITHUB_OUTPUT
+            echo "url=${{ steps.preview-deploy.outputs.NETLIFY_PREVIEW_URL }}" >> $GITHUB_OUTPUT
           fi
 
       # Update deployment status
