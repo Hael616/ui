@@ -8,7 +8,7 @@
 	<section class="grid gap-6 text-center">
 		<h1 class="text-3xl font-bold tracking-tighter sm:text-5xl md:text-6xl">hash/ui</h1>
 		<p class="mx-auto max-w-[42rem] text-muted-foreground md:text-xl">
-			A collection of reusable, accessible and beautiful UI components for your SvelteKit projects.
+			A collection of reusable, accessible UI components for your SvelteKit projects.
 		</p>
 		<div class="flex flex-wrap justify-center gap-4">
 			<a href="/components">
