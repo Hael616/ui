@@ -1,7 +1,16 @@
 name: Continuous Integration
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - prod
+  pull_request:
+    branches:
+      - main
+      - prod
+
 jobs:
-  deploy:
+  test-and-deploy:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -25,11 +34,11 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: pnpm run build
-
-      # Output build directory contents for debugging
       - name: List build output
         run: ls -la ./build || echo "build directory not found"
-      - name: Deploy to netlify
+
+      - name: Deploy PR Preview
+        if: github.event_name == 'pull_request'
         uses: nwtgck/actions-netlify@v3.0
         with:
           publish-dir: './build'
@@ -44,6 +53,23 @@ jobs:
           fails-without-credentials: true # Fail if credentials are missing or invalid
 
           alias: deploy-preview-${{ github.event.number }}- # Preview URL for pull requests
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+
+      - name: Deploy Production
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/prod')
+        uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: './build'
+        z  production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          enable-commit-comment: true
+          enable-commit-status: true
+          enable-github-deployment: true
+          netlify-config-path: ./netlify.toml
+          fails-without-credentials: true
+          production-deploy: true
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
