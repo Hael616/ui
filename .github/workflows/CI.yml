@@ -7,9 +7,15 @@ jobs:
       matrix:
         node-version: [18.x, 20.x, 22.x]
 
-    steps:
-      - name: Checkout code with Node.js ${{ matrix.node-version }}
-        uses: actions/checkout@v4
+    steps:  
+      
+      - uses: actions/checkout@v4
+        
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+           version: '10.x'
+      - name: Use Node.js ${{ matrix.node-version }}   
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
@@ -23,7 +29,5 @@ jobs:
           production-branch: main
           enable-github-deployment: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          publish-branch:
-          publish-path: /
           netlify-token: ${{ secrets.NETLIFY_TOKEN }}
           netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
