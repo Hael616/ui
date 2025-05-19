@@ -62,7 +62,7 @@ jobs:
         uses: nwtgck/actions-netlify@v3.0
         with:
           publish-dir: './build'
-        z  production-branch: main
+          production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
           enable-commit-comment: true
           enable-commit-status: true
