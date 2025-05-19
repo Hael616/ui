@@ -1,4 +1,4 @@
-name: Continous Integration
+name: Continuous Integration
 on: [push, pull_request]
 jobs:
   deploy:
@@ -25,20 +25,25 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: pnpm run build
+
+      # Output build directory contents for debugging
       - name: List build output
-        run: ls -la ./dist || echo "dist directory not found"
+        run: ls -la ./build || echo "build directory not found"
       - name: Deploy to netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
-          publish-dir: './dist'
+          publish-dir: './build'
+          production-branch: main
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          enable-pull-request-comment: true
+          enable-pull-request-comment: true # Enable comments to easily find preview URL
           enable-commit-comment: true
           overwrites-pull-request-comment: true
-          enable-github-deployment: true
-          netlify-config-path: ./netlify.toml 
-          fails-without-credentials: true 
-          alias: deploy-preview-${{ github.event.number }} 
+          enable-commit-status: true
+          enable-github-deployment: true # Create GitHub deployment
+          netlify-config-path: ./netlify.toml
+          fails-without-credentials: true # Fail if credentials are missing or invalid
+
+          alias: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || github.ref_name }}
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
