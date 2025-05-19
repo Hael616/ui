@@ -17,8 +17,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
-      - name: Install Netlify
-        run: pnpm add netlify-cli --save-dev
       - name: Install Dependencies
         run: pnpm install   
       - name: Run tests
@@ -27,12 +25,18 @@ jobs:
         env: 
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: pnpm build
-      - name: Deploy
-        run: |
-          pnpx netlify deploy \
-            --dir dist \
-            --site ${{ secrets.NETLIFY_SITE_ID }} \
-            --auth ${{ secrets.NETLIFY_API_TOKEN }}
+      - name: Deploy to netlify
+        uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: './dist'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          deploy-message: "Deploy from GitHub Actions"
+          enable-pull-request-comment: false
+          enable-commit-comment: true
+          overwrites-pull-request-comment: true
+        env:
+            NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+            NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 
 
         
