@@ -39,37 +39,24 @@ jobs:
 
       - name: Deploy PR Preview
         if: github.event_name == 'pull_request'
-        uses: nwtgck/actions-netlify@v3.0
+        uses: jsmrcaga/action-netlify-deploy@v2.0.0
         with:
-          publish-dir: './build'
-          production-branch: main
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          enable-pull-request-comment: true # Enable comments to easily find preview URL
-          enable-commit-comment: true
-          overwrites-pull-request-comment: true
-          enable-commit-status: true
-          enable-github-deployment: true # Create GitHub deployment
-          netlify-config-path: ./netlify.toml
-          fails-without-credentials: true # Fail if credentials are missing or invalid
-
-          alias: deploy-preview-${{ github.event.number }}- # Preview URL for pull requests
-        env:
+          deploy_alias: ${{ github.event.number }} # Preview URL for pull requests
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          build_directory: 'build'
+          install_command: pnpm install
+          build_command: pnpm run build
 
       - name: Deploy Production
         if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/prod')
         uses: nwtgck/actions-netlify@v3.0
         with:
-          publish-dir: './build'
-          production-branch: main
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          enable-commit-comment: true
-          enable-commit-status: true
-          enable-github-deployment: true
-          netlify-config-path: ./netlify.toml
-          fails-without-credentials: true
-          production-deploy: true
-        env:
+          deploy_alias: ${{ github.event.number }} # Preview URL for pull requests
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_DEPLOY_TO_PROD: true
+          build_directory: 'build'
+          install_command: pnpm install
+          build_command: pnpm run build
+        
