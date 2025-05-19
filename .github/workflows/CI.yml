@@ -26,7 +26,7 @@ jobs:
       - name: Run tests
         run: pnpm run test
       - name: Build
-        run: pnpx netlify build
+        run: pnpm build
       - name: Deploy
         run: |
           netlify deploy \
