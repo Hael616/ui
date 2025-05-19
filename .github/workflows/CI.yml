@@ -22,10 +22,17 @@ jobs:
       - name: Install Netlify
         run: pnpm add netlify-cli --save-dev
       - name: Install Dependencies
-      - run: pnpm install   
-      - run: pnpm run test
-      - run: pnpx netlify build
-      - run: pnpx netlify deploy --alias=preview
+        run: pnpm install   
+      - name: Run tests
+        run: pnpm run test
+      - name: Build
+        run: pnpx netlify build
+      - name: Deploy
+        run: |
+          netlify deploy \
+            --dir dist \
+            --site ${{ secrets.NETLIFY_SITE_ID }} \
+            --auth ${{ secrets.NETLIFY_API_TOKEN }}
 
 
         
