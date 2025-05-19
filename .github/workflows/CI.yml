@@ -1,7 +1,16 @@
 name: Continuous Integration
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+      - prod
+  pull_request:
+    branches:
+      - main
+      - prod
+
 jobs:
-  deploy:
+  test-and-deploy:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -16,34 +25,32 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
-      - name: Install Dependencies
-        run: pnpm install
-      - name: Run tests
-        run: pnpm run test
-      - name: Build
-        env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: pnpm run build
-
-      # Output build directory contents for debugging
-      - name: List build output
-        run: ls -la ./build || echo "build directory not found"
-      - name: Deploy to netlify
-        uses: nwtgck/actions-netlify@v3.0
+          cache: 'pnpm'    
+      
+      - name: Deploy PR Preview
+        if: github.event_name == 'pull_request'
+        uses: jsmrcaga/action-netlify-deploy@v2.4.0
         with:
-          publish-dir: './build'
-          production-branch: main
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          enable-pull-request-comment: true # Enable comments to easily find preview URL
-          enable-commit-comment: true
-          overwrites-pull-request-comment: true
-          enable-commit-status: true
-          enable-github-deployment: true # Create GitHub deployment
-          netlify-config-path: ./netlify.toml
-          fails-without-credentials: true # Fail if credentials are missing or invalid
-
-          alias: deploy-preview-${{ github.event.number }}- # Preview URL for pull requests
-        env:
+          deploy_alias: ${{ github.event.number }} # Preview URL for pull requests
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          build_directory: 'build'
+          install_command: pnpm install
+          build_command: pnpm run build
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}  
+
+      - name: Deploy Production
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/prod')
+        uses: jsmrcaga/action-netlify-deploy@v2.4.0
+        with:
+          deploy_alias: ${{ github.event.number }} # Preview URL for pull requests
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_DEPLOY_TO_PROD: true
+          build_directory: 'build'
+          install_command: pnpm install
+          build_command: pnpm run build
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        
