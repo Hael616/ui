@@ -24,7 +24,7 @@ jobs:
       - name: Build
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
-        run: pnpm build
+        run: pnpm run build
       - name: Deploy to netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
@@ -34,6 +34,7 @@ jobs:
           enable-commit-comment: true
           overwrites-pull-request-comment: true
           enable-github-deployment: false
+          netlify-config-path: ./netlify.toml 
           alias: deploy-preview-${{ github.event.number }} 
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
