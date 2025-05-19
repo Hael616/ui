@@ -25,16 +25,19 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: pnpm run build
+      - name: List build output
+        run: ls -la ./dist || echo "dist directory not found"
       - name: Deploy to netlify
         uses: nwtgck/actions-netlify@v3.0
         with:
           publish-dir: './dist'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          enable-pull-request-comment: false
+          enable-pull-request-comment: true
           enable-commit-comment: true
           overwrites-pull-request-comment: true
-          enable-github-deployment: false
+          enable-github-deployment: true
           netlify-config-path: ./netlify.toml 
+          fails-without-credentials: true 
           alias: deploy-preview-${{ github.event.number }} 
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
