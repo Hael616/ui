@@ -1,15 +1,29 @@
-# name: Continous Integration
-# on: [push, pull_request]
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v4
-#         with:
-#           node-version: '22.x'
-#       - run: npm run test
-#       - run: npm run build
+name: Continous Integration
+on: [push, pull_request]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
 
-#   deploy:
+    steps:
+      - name: Checkout code with Node.js ${{ matrix.node-version }}
+        uses: actions/checkout@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+      - run: pnpm run test
+      - run: pnpm run build
 
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3.0
+        with:
+          publish-dir: ./dist
+          production-branch: main
+          enable-github-deployment: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          publish-branch:
+          publish-path: /
+          netlify-token: ${{ secrets.NETLIFY_TOKEN }}
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}
