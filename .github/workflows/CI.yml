@@ -15,9 +15,9 @@ jobs:
     strategy:
       matrix:
         node-version: [22.x]
-    
+
     permissions:
-      deployments: write    
+      deployments: write
     steps:
       - name: Create GitHub deployment
         id: deployment
@@ -34,9 +34,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'    
-      
+          cache: 'pnpm'
+
       - name: Deploy PR Preview
+        id: preview-deploy
         if: github.event_name == 'pull_request'
         uses: jsmrcaga/action-netlify-deploy@v2.4.0
         with:
@@ -47,9 +48,10 @@ jobs:
           install_command: pnpm install
           build_command: pnpm run build
         env:
-          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}  
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
       - name: Deploy Production
+        id: production-deploy
         if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/prod')
         uses: jsmrcaga/action-netlify-deploy@v2.4.0
         with:
@@ -71,7 +73,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
           state: 'success'
-          environment-url: ${{ github.event_name == 'push' && 'https://hael-hash-ui.netlify.app' || format('https://deploy-preview-{0}.netlify.app', github.event.number) }}
+          environment-url: ${{ github.event_name == 'push' && steps.production-deploy.outputs.NETLIFY_LIVE_URL || steps.preview-deploy.outputs.NETLIFY_PREVIEW_URL }}
 
       - name: Update deployment status (failure)
         if: failure()
@@ -79,5 +81,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
-          state: 'failure'   
-        
+          state: 'failure'
