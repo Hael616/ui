@@ -78,16 +78,6 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
-      # Get deployment URL
-      - name: Get deployment URL
-        id: get-url
-        run: |
-          if [ "${{ github.event_name }}" = "push" ]; then
-            echo "url=${{ steps.production-deploy.outputs.NETLIFY_LIVE_URL }}" >> $GITHUB_OUTPUT
-          else
-            echo "url=${{ steps.preview-deploy.outputs.NETLIFY_PREVIEW_URL }}" >> $GITHUB_OUTPUT
-          fi
-
       # Update deployment status
       - name: Update deployment status (success)
         if: success()
@@ -96,7 +86,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
           state: 'success'
-          environment-url: ${{ steps.get-url.outputs.url }}
+          environment-url:  environment-url: ${{ github.event_name == 'push' && 'https://hael-hash-ui.netlify.app' || format('https://pr-{0}--hael-hash-ui.netlify.app', github.event.number) }}
 
       - name: Update deployment status (failure)
         if: failure()
