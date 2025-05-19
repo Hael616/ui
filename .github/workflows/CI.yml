@@ -15,7 +15,16 @@ jobs:
     strategy:
       matrix:
         node-version: [22.x]
+    
+    permissions:
+      deployments: write    
     steps:
+      - name: Create GitHub deployment
+        id: deployment
+        uses: chrnorm/deployment-action@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          environment: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/prod') && 'production' || 'preview' }}
       - uses: actions/checkout@v4
       - name: Install pnpm
         uses: pnpm/action-setup@v4
