@@ -74,11 +74,7 @@
   </div>
 </div>
 
-<style>
-  .rounded-container {
-    @apply bg-[#0d1117] rounded-md;
-  }
-  
+<style lang="postcss">
   .package-manager-selector :global(pre) {
     padding-bottom: 0!important;
   }
