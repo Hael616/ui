@@ -10,19 +10,19 @@ jobs:
     steps:  
       
       - uses: actions/checkout@v4
-        
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
            version: '10.x'
       - name: Use Node.js ${{ matrix.node-version }}   
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: 'pnpm'
       - name: Install Netlify
         run: pnpm add netlify-cli --save-dev
       - name: Install Dependencies
-        run: pnpm install   
+      - run: pnpm install   
       - run: pnpm run test
       - run: pnpx netlify build
       - run: pnpx netlify deploy --alias=preview
