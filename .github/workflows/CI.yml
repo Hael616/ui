@@ -86,7 +86,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           deployment-id: ${{ steps.deployment.outputs.deployment_id }}
           state: 'success'
-          environment-url:  environment-url: ${{ github.event_name == 'push' && 'https://hael-hash-ui.netlify.app' || format('https://pr-{0}--hael-hash-ui.netlify.app', github.event.number) }}
+          environment-url: ${{ github.event_name == 'push' && 'https://hael-hash-ui.netlify.app' || format('https://pr-{0}--hael-hash-ui.netlify.app', github.event.number) }}
 
       - name: Update deployment status (failure)
         if: failure()
