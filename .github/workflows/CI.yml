@@ -43,7 +43,7 @@ jobs:
           netlify-config-path: ./netlify.toml
           fails-without-credentials: true # Fail if credentials are missing or invalid
 
-          alias: ${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.number) || github.ref_name }}
+          alias: preview-${{ github.event.number }} # Preview URL for pull requests
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
