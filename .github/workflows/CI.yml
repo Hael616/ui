@@ -29,7 +29,7 @@ jobs:
       
       - name: Deploy PR Preview
         if: github.event_name == 'pull_request'
-        uses: jsmrcaga/action-netlify-deploy@v2.0.0
+        uses: jsmrcaga/action-netlify-deploy@v2.4.0
         with:
           deploy_alias: ${{ github.event.number }} # Preview URL for pull requests
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
@@ -42,7 +42,7 @@ jobs:
 
       - name: Deploy Production
         if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/prod')
-        uses: jsmrcaga/action-netlify-deploy@v2.0.0
+        uses: jsmrcaga/action-netlify-deploy@v2.4.0
         with:
           deploy_alias: ${{ github.event.number }} # Preview URL for pull requests
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
